@@ -13,7 +13,7 @@ function mysqldumplocal()
                 fi
         done
 
-        echo "Press enter to continue."
+        echo "Press enter to begin source database dump download."
         read wait
 }
 
@@ -39,8 +39,8 @@ function mysqldumpremote()
                 fi
         done
 
-        echo "Press enter to continue."
-        read $wait
+        echo "Press enter to continue to import of databases."
+        read wait
 }
 
 function mysqlimport()
@@ -53,27 +53,34 @@ function mysqlimport()
         fi
 }
 
+# Doesn't work properly. Probably will need to use keys or sshpass
+#function passPass()
+#{
+#	expect "assword:"
+#	send $pass"\r"
+#	interact
+#}
+
 while true; do
         echo "Input source server's ip address."
         read ip
-
-        #echo "Input source servers root password."
-        #read -s pass
-
+		
         echo "Input source server's SSH port. Press enter for default."
         read port
-
+ 
         if [ "$port" = "" ]; then
                 port=22
         fi
-
-        echo "Press enter to continue."
+		
+		#echo "Input source servers root password."
+        #read -s pass
+		
+        echo "Press enter to begin destination dump creation."
         read wait
 
         mysqldumplocal
         mysqldumpremote
         mysqlimport
 
-        echo "Process has completed."
         break
 done
