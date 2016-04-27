@@ -60,9 +60,13 @@ while true; do
         echo "Input source servers root password."
         read -s $pass
 
-        echo "Input source server's SSH port"
+        echo "Input source server's SSH port. Press enter for default."
         read $port
-
+	
+	if [ $port == "" ]; then
+		port=22
+	fi
+	
         echo "Press enter to continue."
         read $wait
 
