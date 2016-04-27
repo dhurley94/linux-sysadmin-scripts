@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function mysqldump_local()
+function mysqldumplocal()
 {
 	# local mysql loop
 	while true; do
@@ -17,7 +17,7 @@ function mysqldump_local()
 	read $wait
 }
 
-function mysqldump_remote()
+function mysqldumpremote()
 {
 	# remote mysql loop
 	while true; do
@@ -66,8 +66,8 @@ while true; do
         echo "Press enter to continue."
         read $wait
 
-        mysqldump_local
-	mysqldump_remote
+        mysqldumplocal
+	mysqldumpremote
         mysqlimport
         echo "Process has completed."
 done
