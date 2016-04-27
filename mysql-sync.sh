@@ -8,14 +8,15 @@ function mysqldump_local()
 		mysqldump > /root/dstgrab.sql
 		# check if exists
 		if [ -e /root/dstgrab.sql ]; then
-			echo "created dst mysql dump"
+			echo "Destination MySQL dump has been created."
 			break
 		fi
 	done
 	
-	echo "please verify this completed successfully before continuing."
+	echo "Press enter to continue."
 	read $wait
 }
+
 function mysqldump_remote()
 {
 	# remote mysql loop
@@ -24,46 +25,49 @@ function mysqldump_remote()
 		ssh root@$ip:$port 'mysqldump > /root/srcgrab.sql'
 		echo $pass
 
-	# download src dump
+		# download src dump
 		rsync aux -e 'ssh -p '$port root@$ip:/root/srcgrab.sql /root/
 		echo $pass
 		
-	# check if exists
+		# check if exists
 		if [ -e "/root/srcgrab.sql" ]; then
-			echo "succeeded in downloading src mysql dump"
+			echo "Creation of MySQL dump of source server was successful."
 			break
 		else
-			echo "failed in downloading the sql dump. retrying..."
+			echo "Failed in downloading the sql dump. Enter to retry."
+			read $wait
 		fi
 	done
 	
-	echo "please verify this completed successfully before continuing."
+	echo "Press enter to continue."
 	read $wait
 }
+
 function mysqlimport()
 {
 	if [ -e "/root/srcgrab.sql" ]; then
+		echo "Beginning import of source SQL dump."
 		mysql < srcgrab.sql
-	else
-		echo "import failed. check error logs before continuing."
+		echo "Process has completed. Please test and verify nothing broke."
 		read $wait
 	fi
 }
+
 while true; do
-        echo "input SRC ip address"
+        echo "Input source server's ip address."
         read $ip
 
-        echo "input root password"
-        read $pass
+        echo "Input source servers root password."
+        read -s $pass
 
-        echo "input port number"
+        echo "Input source server's SSH port"
         read $port
 
-        echo "please press enter to begin process"
+        echo "Press enter to continue."
         read $wait
 
         mysqldump_local
-		mysqldump_remote
+	mysqldump_remote
         mysqlimport
-        echo "process has completed. please verify" >> /root/mysqlsync.log
+        echo "Process has completed."
 done
