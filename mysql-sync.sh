@@ -3,15 +3,14 @@
 function mysqldumplocal()
 {
         # local mysql loop
-        while true; do
-                # create dst dump
-                mysqldump --all-databases > /root/dstgrab.sql
-                # check if exists
-                if [ -e /root/dstgrab.sql ]; then
-                        echo "Destination MySQL dump has been created."
-                        break
-                fi
-        done
+        if [ -a /root/localgrab.sql ]; then
+        	echo "File already exists."
+        else
+        	mysqldump --all-databases > /root/localgrab.sql
+        	if [ -a /root/localgrab.sql ]; then
+        		echo "File has been created."
+        	fi
+        fi
 
         echo "Press enter to begin source database dump download."
         read wait
@@ -19,6 +18,9 @@ function mysqldumplocal()
 
 function mysqldumpremote()
 {
+	if [ ! -e "/root/srcgrab.sql" ]; then 
+		ssh root@$ip -p $port "mysqldump --all-databases > /root/srcgrab.sql"
+		rsync -aux -e "ssh -p $port" root@"$ip":/root/srcgrab.sql /root/
         # remote mysql loop
         while true; do
                 # create src dump
