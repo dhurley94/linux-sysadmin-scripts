@@ -17,6 +17,12 @@ function backup()
 	ssh root@$ip -p $port "cp /var/cpanel/mainip /var/cpanel/mainip.bak"
 	
 	echo "All necessary files have been recreated. [filename].bak"
+	printf "\n
+	/etc/hosts.bak\n
+	/etc/ips.bak\n
+	/etc/sysconfig/network.bak\n
+	/etc/sysconfig/network-scripts/ifcfg-eth0.bak\n
+	/var/cpanel/mainip.bak"
 }
 
 function download()
