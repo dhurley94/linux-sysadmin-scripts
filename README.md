@@ -1,6 +1,6 @@
 <snippet>
   <content>
-# cPanel or Vanilla CentOS / RHEL 
+# cPanel or Vanilla CentOS / RHEL IP Configuration Swapper
 TODO: Write a project description
 ## Installation
 wget [url]
