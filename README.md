@@ -1,8 +1,9 @@
 <snippet>
   <content>
-# cPanel or Vanilla CentOS / RHEL IP Configuration Swapper
+# CentOS / RHEL IP Configuration Swapper
 TODO: Write a project description
 ## Installation
+Only works with CentOS / RHEL using cPanel or Vanilla OS.
 wget [url]
 ## Usage
 python [name].py
