@@ -1,6 +1,6 @@
 <snippet>
   <content>
-# ${1:cPanel or Vanilla CentOS / RHEL 
+# cPanel or Vanilla CentOS / RHEL 
 TODO: Write a project description
 ## Installation
 wget [url]
