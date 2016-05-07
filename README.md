@@ -3,7 +3,7 @@
 # CentOS / RHEL IP Configuration Swapper
 TODO: Write a project description
 ## Installation
-Only works with CentOS / RHEL using cPanel or Vanilla OS.
+Only works with CentOS / RHEL using cPanel or Vanilla OS.<br />
 wget [url]
 ## Usage
 python [name].py
