@@ -12,3 +12,9 @@ WIP
 ></content>
   <tabTrigger>readme</tabTrigger>
 </snippet>
+
+
+#TODO
+script is to be run on destination server. <br />
+rsync ifcfg-eth* to source server <br />
+have client input ip addresses, or somehow generate json of available interfaces on source. <br />
