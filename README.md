@@ -1,6 +1,6 @@
 <snippet>
-  <content><![CDATA[
-# ${1:Project Name}
+  <content>
+# ${1:cPanel or Vanilla CentOS / RHEL 
 TODO: Write a project description
 ## Installation
 wget [url]
@@ -8,6 +8,6 @@ wget [url]
 python [name].py
 ## Contributing
 WIP
-]]></content>
+></content>
   <tabTrigger>readme</tabTrigger>
 </snippet>
