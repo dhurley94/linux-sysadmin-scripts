@@ -27,7 +27,7 @@ class NetworkDevice:
     # return default gateway
     def getgateway(self):
         return int(self.octets[3]) - 1
-    
-    
+
     def gethosts(self):
-        return 256 - int(self.octets[3]) - 3
+        subList = self.subnet.split('.')
+        return 256 - int(subList[3]) - 3
