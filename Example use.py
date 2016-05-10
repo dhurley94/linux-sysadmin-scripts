@@ -38,7 +38,7 @@ def createnetwork(ifcfg):
     target.close()
 
 # create array of ip range for config creation
-def validHosts(mainip, hosts): # todo fix this
+def validHosts(mainip, hosts):
     mainip = mainip.split('.')
     validLast = []
     for i in range(int(hosts)):
@@ -50,10 +50,10 @@ def validHosts(mainip, hosts): # todo fix this
 
 RANGES = []
 
-num =  int(raw_input("Input how many ranges.\n"))
+num = int(raw_input("Input how many ranges.\n"))
 
 for i in range(num):
-    print "Data for ip range #" + str(i) + "\n"
+    print "Data for ip range #" + str(i + 1) + "\n"
     dev = raw_input("Name of device? ie: eth0\n")
     mainip = raw_input("First valid ip address\n")
     subnet = raw_input("Valid Subnet? ie: 255.255.255.248\n\n")
@@ -67,4 +67,4 @@ for i in range(len(RANGES)):
     print "Hardware Address: " + RANGES[i].gethwaddr()
     print "Network ID: " + str(RANGES[i].octets[0]) + "." + str(RANGES[i].octets[1]) + "." + str(RANGES[i].octets[2]) + "." + str(RANGES[i].getnetwork())
     print "Gateway: " + str(RANGES[i].octets[0]) + "." + str(RANGES[i].octets[1]) + "." + str(RANGES[i].octets[2]) + "." + str(RANGES[i].getgateway())
-    #print "All valid hosts in subnet: " + str(validHosts(RANGES[i].mainip, RANGES[i].gethosts()))
+    print "All valid hosts in subnet: " + str(validHosts(RANGES[i].mainip, RANGES[i].gethosts()))
