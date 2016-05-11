@@ -27,7 +27,7 @@ function mysqldumpremote()
                 echo "Failed in downloading the sql dump."
                 read wait
             fi
-        done
+        fi
 
         echo "Press enter to continue to import of databases."
         read wait
