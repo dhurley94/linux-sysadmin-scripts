@@ -21,10 +21,10 @@ function mysqldumpremote()
 	if [ ! -e "/root/srcgrab.sql" ]; then 
 		ssh root@$ip -p $port "mysqldump --all-databases > /root/srcgrab.sql"
 		rsync -aux -e "ssh -p $port" root@"$ip":/root/srcgrab.sql /root/
-			if [ -e "/root/srcgrab.sql" ]; then
-				echo "Download of source MySQL dump of source server was successful."
-            		else
-                		echo "Failed in downloading the sql dump."
+		if [ -e "/root/srcgrab.sql" ]; then
+			echo "Download of source MySQL dump of source server was successful."
+            	else
+                	echo "Failed in downloading the sql dump."
                 	read wait
             	fi
         fi
