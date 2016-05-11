@@ -23,10 +23,10 @@ function mysqldumpremote()
 		rsync -aux -e "ssh -p $port" root@"$ip":/root/srcgrab.sql /root/
 			if [ -e "/root/srcgrab.sql" ]; then
 				echo "Download of source MySQL dump of source server was successful."
-            else
-                echo "Failed in downloading the sql dump."
-                read wait
-            fi
+            		else
+                		echo "Failed in downloading the sql dump."
+                	read wait
+            	fi
         fi
 
         echo "Press enter to continue to import of databases."
