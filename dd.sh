@@ -1,4 +1,3 @@
-#./dd.sh 2>&1 > error.log
 #!/bin/bash
 
 cd /olddrive/etc/
@@ -15,7 +14,8 @@ rsync -avHz /olddrive/usr/share/ssl /usr/share
 rsync -avHz /olddrive/var/log/bandwidth /var/log
 rsync -avHz /olddrive/var/spool/cron /var/spool
 rsync -avHz /olddrive/root/.my.cnf /root
-rsync -avHz --exclude=virtfs/ /olddrive/home/* /home
+
+rsync -avHz --progress --exclude=virtfs/ /olddrive/home /home
 
 /scripts/upcp --force
 /scripts/easyapache
@@ -26,5 +26,3 @@ rsync -avHz --exclude=virtfs/ /olddrive/home/* /home
 /scripts/restartsrv_apache
 /scripts/restartsrv_exim
 /scripts/restartsrv_named
-
-for i in  `cat /etc/trueuserdomains|awk '{print $2}'`;do rsync -avHz -e "ssh" --progress /home/$i/mail/* ip.ip.ip.ip:/home/$i/mail;done
