@@ -15,7 +15,7 @@ rsync -avHz /olddrive/var/log/bandwidth /var/log
 rsync -avHz /olddrive/var/spool/cron /var/spool
 rsync -avHz /olddrive/root/.my.cnf /root
 
-rsync -avHz --progress --exclude=virtfs/ /olddrive/home /home
+rsync -avHz --progress --exclude=virtfs/ /olddrive/home /
 
 /scripts/upcp --force
 /scripts/easyapache
