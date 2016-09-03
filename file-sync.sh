@@ -9,10 +9,10 @@ function backup()
 	#cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.bak
 	#cp /var/cpanel/mainip /var/cpanel/mainip.bak
 	
-	tar -cvzf network.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip
+	tar -cvzf /root/network.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip
 	
 	# backup remote
-	ssh root@$ip -p $port "tar -cvzf network.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip"
+	ssh root@$ip -p $port "tar -cvzf /root/network.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip"
 	#ssh root@$ip -p $port "cp /etc/ips /etc/ips.bak"
 	#ssh root@$ip -p $port "cp /etc/sysconfig/network /etc/sysconfig/network.bak"
 	#ssh root@$ip -p $port "cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.bak"
@@ -30,13 +30,13 @@ function backup()
 function download()
 {
 	# replace dst with src files
-	rsync -aux -e "ssh -p $port" root@"$ip":/etc/hosts /etc/
-	rsync -aux -e "ssh -p $port" root@"$ip":/etc/ips /etc/
-	rsync -aux -e "ssh -p $port" root@"$ip":/etc/sysconfig/network /etc/sysconfig/
-	rsync -aux -e "ssh -p $port" root@"$ip":/etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/
-	rsync -aux -e "ssh -p $port" root@"$ip"/var/cpanel/mainip /var/cpanel/
-	
+	rsync -auv -e "ssh -p $port" root@"$ip":/root/network.tar.gz
+	echo "The tarball has been downloaded."
+	echo "Press enter to extract the files."
+        read wait
+        tar -czvf /root/network.tar.gz
 	echo "Files have been synced from Source -> Destination"
+	
 }
 
 while true; do
