@@ -3,18 +3,20 @@
 function backup()
 {
 	# backup local
-	cp /etc/hosts /etc/hosts.bak
-	cp /etc/ips /etc/ips.bak
-	cp /etc/sysconfig/network /etc/sysconfig/network.bak
-	cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.bak
-	cp /var/cpanel/mainip /var/cpanel/mainip.bak
+	#cp /etc/hosts /etc/hosts.bak
+	#cp /etc/ips /etc/ips.bak
+	#cp /etc/sysconfig/network /etc/sysconfig/network.bak
+	#cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.bak
+	#cp /var/cpanel/mainip /var/cpanel/mainip.bak
+	
+	tar -cvzf network.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip
 	
 	# backup remote
-	ssh root@$ip -p $port "cp /etc/hosts /etc/hosts.bak"
-	ssh root@$ip -p $port "cp /etc/ips /etc/ips.bak"
-	ssh root@$ip -p $port "cp /etc/sysconfig/network /etc/sysconfig/network.bak"
-	ssh root@$ip -p $port "cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.bak"
-	ssh root@$ip -p $port "cp /var/cpanel/mainip /var/cpanel/mainip.bak"
+	ssh root@$ip -p $port "tar -cvzf network.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip"
+	#ssh root@$ip -p $port "cp /etc/ips /etc/ips.bak"
+	#ssh root@$ip -p $port "cp /etc/sysconfig/network /etc/sysconfig/network.bak"
+	#ssh root@$ip -p $port "cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.bak"
+	#ssh root@$ip -p $port "cp /var/cpanel/mainip /var/cpanel/mainip.bak"
 	
 	echo "All necessary files have been recreated. [filename].bak"
 	printf "\n
