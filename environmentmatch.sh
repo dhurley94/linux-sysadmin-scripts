@@ -18,21 +18,20 @@ function verifyVer()
 
 while true; do
 	echo "This script should be ran on the destination server."
-    echo "Input source server's ip address."
-    read ip
-		
-    echo "Input source server's SSH port. Press enter for default."
-    read port
+	echo "Input source server's ip address."
+	read ip
+	echo "Input source server's SSH port. Press enter for default."
+    	read port
  
-    if [ "$port" = "" ]; then
-        port=22
-    fi
+    	if [ "$port" = "" ]; then
+		port=22
+    	fi
 		
 	echo "Press enter to begin tar extract"
-    read wait
+    	read wait
 	tarballs
 	cd /root/ && mkdir migrate_conf && tar -zxvf files.tar.gz -C migrate_conf/ && cd /root/migrate_conf && mv etc/my.cnf /etc/my.cnf && mv usr/local/lib/php.ini /usr/local/lib/php.ini && mv /var/cpanel/easy/apache/profile/_main.yaml /var/cpanel/easy/apache/profile/_main.yaml && mv /var/cpanel/easy/apache/profile/_last_success.yaml /var/cpanel/easy/apache/profile/_last_success.yaml
-    /scripts/easyapache
+    	/scripts/easyapache
 	verifyVer
 	break
 done
