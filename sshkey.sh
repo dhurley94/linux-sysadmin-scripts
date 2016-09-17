@@ -1,24 +1,23 @@
 #!/bin/bash
 while true; do
-	echo "Input source server's ip address."
+	echo "Input the other servers username."
+	read user
+	echo "Input server's ip address."
 	read ip
-	echo "Input source server's SSH port. Press enter for default."
+	echo "Input server's SSH port. Press enter for default."
 	read port
 	if [ "$port" = "" ]; then
 		port=22
 	fi
-	echo "$ip:$port"
-	echo 'Are both the IP and Port correct? y/n'		
+	printf "\nUser: $user\n$ip:$port\n\n"
+	echo 'Are both the IP, Port and User correct? y/n'		
 	read wait
 	if [ "$wait" == "y" ]; then
 		ssh-keygen -t rsa
-		cat ~/.ssh/id_rsa.pub | ssh root@$ip:$port "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"
+		ssh-copy-id -p $port $user@$ip
 		printf "Testing SSH Keys. \n"
-		ssh root@$ip:$port
-		printf "If you were prompted for a password\n
-			something went wrong. 
-			Please run this script again.\n\n
-			If you were not prompted it was successful!\nHave a good day!"
+		ssh -p $port $user@$ip
+		printf "\n You are now using SSH keys!\n"
 		break
 	fi
 done 
