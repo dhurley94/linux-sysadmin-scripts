@@ -1,4 +1,6 @@
 #!/bin/bash
+# wget http://rizse.tk/scripts/sshkey.sh
+# sh sshkey.sh
 while true; do
 	echo "Input the other servers username."
 	read user
