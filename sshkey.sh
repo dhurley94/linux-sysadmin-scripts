@@ -13,6 +13,12 @@ while true; do
 	if [ "$wait" == "y" ]; then
 		ssh-keygen -t rsa
 		cat ~/.ssh/id_rsa.pub | ssh root@$ip:$port "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"
+		printf "Testing SSH Keys. \n"
+		ssh root@$ip:$port
+		printf "If you were prompted for a password\n
+			something went wrong. 
+			Please run this script again.\n\n
+			If you were not prompted it was successful!\nHave a good day!"
 		break
 	fi
 done 
