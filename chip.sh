@@ -46,7 +46,7 @@ revert() {
 	# ping 8.8.8.8 after 120s revert settings?
 }
 
-while getopts ":s:p:k:h:" opt; do
+while getopts ":s:p:k:h" opt; do
 	case $opt in		
 		s)
 			sourceip=$OPTARG
