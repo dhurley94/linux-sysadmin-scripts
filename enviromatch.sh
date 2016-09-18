@@ -19,8 +19,8 @@ OPTIONS:
       if ssh keys are in use ignore this.
 	  -k 1 to generate keys now
 	
-Ex: ./chip.sh -s 127.0.0.1 -p 2222
-Ex: ./chip.sh -s 127.0.0.1 -k 1
+Ex: ./enviromatch.sh -s 127.0.0.1 -p 2222
+Ex: ./enviromatch.sh -s 127.0.0.1 -k 1
 "
 	exit 1
 }
