@@ -4,6 +4,7 @@
 function MENU
 {
    echo "
+Run this on the destination server.
 Script to swap IP addresses between two cPanel servers.
 REQUIRED OPTIONS:
 	-s
@@ -23,26 +24,24 @@ Example: ./chip.sh -s 192.168.0.20 -k 1
 	exit 1
 }
 
-setup_sshkey() {
+setup_sshkey() { # generate keys and push to source
 	ssh-keygen -t rsa
 	ssh-copy-id -p $sourceport root@$sourceip
 	sshkey=1
 	echo; echo
 }
 
-tarchk() {
-	if [ -e /root/network-dst.tar.gz ] && [ ssh $sourceip -p $sourceport "-e /root/network-src.tar.gz" ]; then
-		return true;
-	else
-		return false;
-	fi
+tarchk() { # verify tarballs exist on source & destination
+	if [ -e /root/network-dst.tar.gz ] && [ ssh $sourceip -p $sourceport "-e /root/network-src.tar.gz" ]; then return true; else return false; fi
 }
 
 revert() {
 	echo 'REVERT FUNC'
+	# store initial values in a text file
+	# restore with them?
 }
 
-while getopts ":s:p:k:h:" opt; do	
+while getopts ":s:p:k:h:" opt; do
 	case $opt in		
 		s)
 			sourceip=$OPTARG
@@ -65,17 +64,17 @@ while getopts ":s:p:k:h:" opt; do
 	esac
 done
 
-if [[ $# -eq 0 || -z $sourceip ]]; then MENU; fi  # check for existence of required var
-if [ -z $sourceport ]; then sourceport=22; fi # apply port 22 if none is set
-if [ -z $sshkey ]; then setup_sshkey; fi # gen ssh key if not set
-
-ifcfg="/etc/sysconfig/network-scripts/ifcfg-eth0"
-
 if [[ `whoami` != "root" ]] # verifying root login
 then
    echo "You'll to be root."
    exit 1
 fi
+
+if [[ $# -eq 0 || -z $sourceip ]]; then MENU; fi  # check for existence of required var
+if [ -z $sourceport ]; then sourceport=22; fi # apply port 22 if none is set
+if [ -z $sshkey ]; then setup_sshkey; fi # gen ssh key if not set
+
+ifcfg="/etc/sysconfig/network-scripts/ifcfg-eth0"
 
 # create tars
 tar -cvzf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip 2&1 >> chip.log
