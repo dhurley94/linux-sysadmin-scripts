@@ -43,6 +43,7 @@ revert() {
 	echo 'REVERT FUNC'
 	# store initial values in a text file
 	# restore with them?
+	# ping 8.8.8.8 after 120s revert settings?
 }
 
 while getopts ":s:p:k:h:" opt; do
@@ -81,8 +82,8 @@ if [ ! -z $sshkey ]; then setup_sshkey; fi # gen ssh key if not set
 ifcfg="/etc/sysconfig/network-scripts/ifcfg-eth0"
 
 # create tars
-tar -czf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip 2&1 >> chip.log
-ssh root@$sourceip -p $sourceport "tar -czf /root/network-src.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip" 2&1 >> chip.log
+tar -czf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip
+ssh root@$sourceip -p $sourceport "tar -czf /root/network-src.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip"
 
 # check things and start the swap
 if [ tarchk ]; then
