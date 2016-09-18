@@ -1,4 +1,5 @@
 #!/bin/bash
+# In progress IP swap tool for cPanel servers
 
 function MENU
 {
