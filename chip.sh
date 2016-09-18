@@ -76,11 +76,11 @@ then
    exit 1
 fi
 
-
-
+# create tars
 tar -cvzf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip 2&1 >> chip.log
 ssh root@$sourceip -p $sourceport "tar -cvzf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip" 2&1 >> chip.log
 
+# check things and start the swap
 if [ tarchk ]; then
 	# pull / push ifcfg to servers and sed hwaddr?
 	base=(IPADDR GATEWAY NETMASK) # sed replace these strings
@@ -106,7 +106,6 @@ if [ tarchk ]; then
 	
 	ssh root@$sourceip -p $sourceport "sed -i '/$sourceip/c\$destinationip/' $ifcfg"
 	ssh root@$sourceip -p $sourceport "sed -i '/$sourcegateway/c\$destinationgateway' $ifcfg"
-	
 else
 	echo "Failed. The tarballs were not found. Please restart script"
 	exit
