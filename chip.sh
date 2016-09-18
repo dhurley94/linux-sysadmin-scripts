@@ -16,8 +16,8 @@ OPTIONS:
 	-k 
       are ssh keys in use? set 1 if yes. defaults to ssh key creation
 	
-Example: ./chip.sh -sp 192.168.0.20 2222
-Example: ./chip.sh -sk 192.168.0.20 1
+Example: ./chip.sh -s 192.168.0.20 -p 2222
+Example: ./chip.sh -s 192.168.0.20 -k 1
 "
 	exit 1
 }
@@ -25,11 +25,12 @@ Example: ./chip.sh -sk 192.168.0.20 1
 setup_sshkey() {
 	ssh-keygen -t rsa
 	ssh-copy-id -p $sourceport root@$sourceip
+	sshkey=1
 	echo; echo
 }
 
 tarchk() {
-	if [ -e /root/network-dst.tar.gz ] && [ ssh $sourceip -p $sourceport "test -e network-src.tar.gz" ]; then
+	if [ -e /root/network-dst.tar.gz ] && [ ssh $sourceip -p $sourceport "-e /root/network-src.tar.gz" ]; then
 		return true;
 	else
 		return false;
@@ -40,25 +41,7 @@ revert() {
 	echo 'REVERT FUNC'
 }
 
-ipswap() {
-	echo 'IPSWAP FUNC'
-	if [ $credchk -eq 1 ] && [ tarballchk ]; then
-		sed -i "/$destinationip/c\$sourceip/" $ifcfg
-		sed -i "/$destinationgateway/c\$sourcegateway/" $ifcfg
-	
-		ssh root@$sourceip -p $sourceport "cat /etc/ips" > /etc/ips
-		ssh root@$sourceip -p $sourceport "cat /var/cpanel/mainip" > /var/cpanel/mainip
-		ssh root@$sourceip -p $sourceport "cat /etc/hosts" > /etc/hosts
-		ssh root@$sourceip -p $sourceport "cat /etc/sysconfig/network" > /etc/sysconfig/network
-	
-		scp /etc/sysconfig/network root@$sourceip -p $sourceport:/etc/sysconfig
-	
-		ssh root@$sourceip -p $sourceport "sed -i '/$sourceip/c\$destinationip/' $ifcfg"
-		ssh root@$sourceip -p $sourceport "sed -i '/$sourcegateway/c\$destinationgateway' $ifcfg"
-	fi
-}
-
-while getopts ":a:r:s:" opt; do	
+while getopts ":s:p:k:h:" opt; do	
 	case $opt in		
 		s)
 			sourceip=$OPTARG
@@ -81,30 +64,50 @@ while getopts ":a:r:s:" opt; do
 	esac
 done
 
-if [[ $# -eq 0 || -z $sourceip ]]; then echo MENU; fi  # check for existence of required var
-if [ -z $sourceport ]; then sourceport=22; fi
-if [ -z $sshkey ]; then setup_sshkey; fi
+if [[ $# -eq 0 || -z $sourceip ]]; then MENU; fi  # check for existence of required var
+if [ -z $sourceport ]; then sourceport=22; fi # apply port 22 if none is set
+if [ -z $sshkey ]; then setup_sshkey; fi # gen ssh key if not set
 
-if [[ `whoami` != "root" ]]
+ifcfg="/etc/sysconfig/network-scripts/ifcfg-eth0"
+
+if [[ `whoami` != "root" ]] # verifying root login
 then
    echo "You'll to be root."
    exit 1
 fi
 
-#tar -cvzf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip
-#ssh root@$sourceip -p $sourceport "tar -cvzf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip"
 
-#if [ tarchk ]; then
-#	ifcfg = "/etc/sysconfig/network-scripts/ifcfg-eth0"
-#	info[0] = "IPADDR"
-#	info[1] = "GATEWAY"
-#	info[2] = "NETMASK"
 
-#	src[]
-#	dst[]
+tar -cvzf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip 2&1 >> chip.log
+ssh root@$sourceip -p $sourceport "tar -cvzf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip" 2&1 >> chip.log
+
+if [ tarchk ]; then
+	# pull / push ifcfg to servers and sed hwaddr?
+	base=(IPADDR GATEWAY NETMASK) # sed replace these strings
+	src=() # current source values
+	dst=() # current destination values
+
+	n=0
+	for i in ${base[@]};  do # building lists
+        src[$n]=(ssh root@$sourceip -p $sourceport "grep $i $ifcfg")
+        dst[$n]=$(grep $i $ifcfg)
+        n=$((n+1))
+	done
 	
-#	for i in 2; do
-#		dst[i] = ssh root@$sourceip -p $sourceport "grep info[i] $ifcfg"
-#		src[i] = grep info[i] $ifcfg
-#	done
-#fi
+	sed -i "/$destinationip/c\$sourceip/" $ifcfg
+	sed -i "/$destinationgateway/c\$sourcegateway/" $ifcfg
+		
+	ssh root@$sourceip -p $sourceport "cat /etc/ips" > /etc/ips
+	ssh root@$sourceip -p $sourceport "cat /var/cpanel/mainip" > /var/cpanel/mainip
+	ssh root@$sourceip -p $sourceport "cat /etc/hosts" > /etc/hosts
+	ssh root@$sourceip -p $sourceport "cat /etc/sysconfig/network" > /etc/sysconfig/network
+	
+	scp /etc/sysconfig/network root@$sourceip -p $sourceport:/etc/sysconfig
+	
+	ssh root@$sourceip -p $sourceport "sed -i '/$sourceip/c\$destinationip/' $ifcfg"
+	ssh root@$sourceip -p $sourceport "sed -i '/$sourcegateway/c\$destinationgateway' $ifcfg"
+	
+else
+	echo "Failed. The tarballs were not found. Please restart script"
+	exit
+fi 
