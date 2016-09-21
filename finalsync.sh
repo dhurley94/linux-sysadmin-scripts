@@ -1,5 +1,4 @@
 #!/bin/bash
-# unfinished and untested
 
 function MENU
 {
@@ -86,7 +85,6 @@ if [ ! -e /root/src-dump.sql ]; then
 else
 	printf "dump already exists. \nimporting dump to dst\n"
 	pv /root/src-dump.sql | mysql -u root
-	
 fi 
 
 for i in `cat /etc/domainusers | cut -d: -f1`; do rsync -azv -e "ssh -p $sourceport" root@$sourceip:/home/$i/public_html /home/$i/
