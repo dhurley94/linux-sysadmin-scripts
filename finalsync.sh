@@ -71,17 +71,22 @@ if [ ! -z $sshkey ]; then setup_sshkey; fi # gen ssh key if set
 yum install pv -y
 
 if [ ! -e /root/dst-dump.sql ]; then
+    printf "creating backup of destination sql"
     mysqldump -u root --all-databases > /root/dst-dump.sql
 fi
 
 if [ ! -e /root/src-dump.sql ]; then
+	printf "creating source sql dump\n"
 	ssh root@$sourceip -p $sourceport "mysqldump -u root --all-databases > /root/src-dump.sql"
+	printf "grabbing source dump\n"
 	rsync -auv --progress -e "ssh -p $sourceport" root@$sourceip:/root/src-dump.sql
+	printf "importing dump to dst\n"
+	pv /root/src-dump.sql | mysql -u root --all-databases
+	printf "check it and verify nothing is broken\n"
 else
 	pv /root/src-dump.sql | mysql -u root --all-databases
 fi 
 
-# add rsync public_html
-
+#for i in `cat /etc/domainusers | cut -d: -f1`; do rsync -azv -e "ssh -p $sourceport" root@$sourceip:/home/$i/public_html /home/$i/
 printf "the final sync has completed.\n
-		please review all databases and public_html directories"
+	please review all databases and public_html directories"
