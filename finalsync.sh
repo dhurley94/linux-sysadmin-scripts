@@ -71,7 +71,7 @@ if [ ! -z $sshkey ]; then setup_sshkey; fi # gen ssh key if set
 yum install pv epel-release -y
 
 if [ ! -e /root/dst-dump.sql ]; then
-    printf "creating backup of destination sql"
+    printf "creating backup of destination sql\n"
     mysqldump -u root --all-databases > /root/dst-dump.sql
 fi
 
@@ -84,9 +84,11 @@ if [ ! -e /root/src-dump.sql ]; then
 	pv /root/src-dump.sql | mysql -u root
 	printf "check it and verify nothing is broken\n"
 else
+	printf "dump already exists. \nimporting dump to dst\n"
 	pv /root/src-dump.sql | mysql -u root
+	
 fi 
 
-#for i in `cat /etc/domainusers | cut -d: -f1`; do rsync -azv -e "ssh -p $sourceport" root@$sourceip:/home/$i/public_html /home/$i/
+for i in `cat /etc/domainusers | cut -d: -f1`; do rsync -azv -e "ssh -p $sourceport" root@$sourceip:/home/$i/public_html /home/$i/
 printf "the final sync has completed.\n
 	please review all databases and public_html directories"
