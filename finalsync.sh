@@ -79,12 +79,12 @@ if [ ! -e /root/src-dump.sql ]; then
 	printf "creating source sql dump\n"
 	ssh root@$sourceip -p $sourceport "mysqldump -u root --all-databases > /root/src-dump.sql"
 	printf "grabbing source dump\n"
-	rsync -auv --progress -e "ssh -p $sourceport" root@$sourceip:/root/src-dump.sql
+	rsync -auv --progress -e "ssh -p $sourceport" root@$sourceip:/root/src-dump.sql /root
 	printf "importing dump to dst\n"
-	pv /root/src-dump.sql | mysql -u root --all-databases
+	pv /root/src-dump.sql | mysql -u root
 	printf "check it and verify nothing is broken\n"
 else
-	pv /root/src-dump.sql | mysql -u root --all-databases
+	pv /root/src-dump.sql | mysql -u root
 fi 
 
 #for i in `cat /etc/domainusers | cut -d: -f1`; do rsync -azv -e "ssh -p $sourceport" root@$sourceip:/home/$i/public_html /home/$i/
