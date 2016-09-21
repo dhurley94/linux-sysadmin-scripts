@@ -68,7 +68,7 @@ if [[ $# -eq 0 || -z $sourceip ]]; then MENU; fi  # check for existence of requi
 if [ -z $sourceport ]; then sourceport=22; fi # apply port 22 if none is set
 if [ ! -z $sshkey ]; then setup_sshkey; fi # gen ssh key if set
 
-yum install pv -y
+yum install pv epel-release -y
 
 if [ ! -e /root/dst-dump.sql ]; then
     printf "creating backup of destination sql"
