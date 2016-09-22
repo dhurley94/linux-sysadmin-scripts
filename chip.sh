@@ -88,40 +88,32 @@ ssh root@$sourceip -p $sourceport "tar -czf /root/network-src.tar.gz /etc/hosts 
 # check things and start the swap
 if [ tarchk ]; then
 	# pull / push ifcfg to servers and sed hwaddr?
-	base=(IPADDR GATEWAY NETMASK HWADDR) # sed replace these strings
-	src=() # current source values
-	dst=() # current destination values
+	#base=(IPADDR GATEWAY NETMASK HWADDR) # sed replace these strings
+	#src=() # current source values
+	#dst=() # current destination values
 
-	n=0
-	for i in ${base[@]};  do # building lists
-        src[$n]=$(ssh root@$sourceip -p $sourceport "grep $i $ifcfg")
-        dst[$n]=$(grep $i $ifcfg)
-        n=$((n+1))
-	done
-	echo "Initial destination before swap: 
-		" + ${dst[*]} >> chip.log
+	#n=0
+	#for i in ${base[@]};  do # building lists
+        #src[$n]=$(ssh root@$sourceip -p $sourceport "grep $i $ifcfg")
+        #dst[$n]=$(grep $i $ifcfg)
+        #n=$((n+1))
+	#done
+	#echo "Initial destination before swap: 
+	#	" + ${dst[*]} >> chip.log
 		
-	echo "Initial source before swap: 
-		" + ${src[*]} >> chip.log
+	#echo "Initial source before swap: 
+	#	" + ${src[*]} >> chip.log
+	
+	
+	dst=grep HWADDR $ifcfg
+	src=ssh root@$sourceip -p $sourport "grep HWADDR $ifcfg"
 	
 	rsync -auv -e "ssh -p $sourceport" root@$sourceip:/root/network-src.tar.gz /root
 	tar -xf /root/network-src.tar.gz -C /
 	ssh root@$sourceip "tar -xf /root/network-dst.tar.gz -C /"
-	grep $base[3] $ifcfg
-	# sed replace hwaddr
 	
-	#sed -i "/$destinationip/c\$sourceip/" $ifcfg
-	#sed -i "/$destinationgateway/c\$sourcegateway/" $ifcfg
-		
-	#ssh root@$sourceip -p $sourceport "cat /etc/ips" > /etc/ips
-	#ssh root@$sourceip -p $sourceport "cat /var/cpanel/mainip" > /var/cpanel/mainip
-	#ssh root@$sourceip -p $sourceport "cat /etc/hosts" > /etc/hosts
-	#ssh root@$sourceip -p $sourceport "cat /etc/sysconfig/network" > /etc/sysconfig/network
-	
-	#scp /etc/sysconfig/network root@$sourceip -p $sourceport:/etc/sysconfig
-	
-	#ssh root@$sourceip -p $sourceport "sed -i '/$sourceip/c\$destinationip/' $ifcfg"
-	#ssh root@$sourceip -p $sourceport "sed -i '/$sourcegateway/c\$destinationgateway' $ifcfg"
+	#check if hwaddr / uuid exist in ifcfg
+		#sed replace hwaddr on src > dst & dst > src
 else
 	echo "Failed. The tarballs were not found. Please restart script"
 	exit
