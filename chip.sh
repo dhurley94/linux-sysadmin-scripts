@@ -1,5 +1,6 @@
 #!/bin/bash
 # In progress IP swap tool for cPanel servers
+# works in current state but need to swap hwaddr / uuid in ifcfg
 
 function MENU
 {
