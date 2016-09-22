@@ -105,7 +105,8 @@ if [ tarchk ]; then
 		" + ${src[*]} >> chip.log
 	
 	rsync -auv -e "ssh -p $sourceport" root@$sourceip:/root/network-src.tar.gz /root
-	tar -Cxzf / /root/network-src.tar.gz
+	tar -xf /root/network-src.tar.gz -C /
+	ssh root@$sourceip "tar -xf /root/network-dst.tar.gz -C /"
 	grep $base[3] $ifcfg
 	# sed replace hwaddr
 	
