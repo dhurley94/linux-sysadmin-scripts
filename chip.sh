@@ -88,24 +88,6 @@ ssh root@$sourceip -p $sourceport "tar -czf /root/network-src.tar.gz /etc/hosts 
 
 # check things and start the swap
 if [ tarchk ]; then
-	# pull / push ifcfg to servers and sed hwaddr?
-	#base=(IPADDR GATEWAY NETMASK HWADDR) # sed replace these strings
-	#src=() # current source values
-	#dst=() # current destination values
-
-	#n=0
-	#for i in ${base[@]};  do # building lists
-        #src[$n]=$(ssh root@$sourceip -p $sourceport "grep $i $ifcfg")
-        #dst[$n]=$(grep $i $ifcfg)
-        #n=$((n+1))
-	#done
-	#echo "Initial destination before swap: 
-	#	" + ${dst[*]} >> chip.log
-		
-	#echo "Initial source before swap: 
-	#	" + ${src[*]} >> chip.log
-	
-	
 	dst=grep HWADDR $ifcfg
 	src=ssh root@$sourceip -p $sourport "grep HWADDR $ifcfg"
 	
@@ -113,8 +95,9 @@ if [ tarchk ]; then
 	tar -xf /root/network-src.tar.gz -C /
 	ssh root@$sourceip "tar -xf /root/network-dst.tar.gz -C /"
 	
-	#check if hwaddr / uuid exist in ifcfg
-		#sed replace hwaddr on src > dst & dst > src
+	
+	cat $ifcfg | sed '/HWADDR/d'
+	ssh root@$sourceip "cat $ifcfg | sed '/HWADDR/d"
 else
 	echo "Failed. The tarballs were not found. Please restart script"
 	exit
