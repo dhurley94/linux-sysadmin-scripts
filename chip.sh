@@ -7,9 +7,7 @@ function MENU
    echo "
 run this on the destination server.
 script to swap IP addresses between two cPanel servers.
-
 !!this script assumes ifcfg-eth0 is your default interface!!
-
 REQUIRED OPTIONS:
 	-s <192.168.1.100>
       set the source ip address.
@@ -40,11 +38,10 @@ tarchk() { # verify tarballs exist on source & destination
 	if [ -e /root/network-dst.tar.gz ] && [ ssh $sourceip -p $sourceport "-e /root/network-src.tar.gz" ]; then return true; else return false; fi
 }
 
-revert() {
+revert() { # doesn't really work yet
 	echo 'REVERT FUNC'
-	# store initial values in a text file
-	# restore with them?
-	# ping 8.8.8.8 after 120s revert settings?
+    tar -xf /root/network-dst.tar.gz -C /
+	ssh root@$sourceip "tar -xf /root/network-src.tar.gz -C /"
 }
 
 while getopts ":s:p:k:h" opt; do
@@ -65,6 +62,11 @@ while getopts ":s:p:k:h" opt; do
 			MENU
 			flag="h"
 			;;
+		r)
+			MENU
+			flag="r"
+			revert
+			;;;
 		\?) echo "invalid option: -$OPTARG"; echo; MENU;;
 		:) echo "option -$OPTARG requires an argument."; echo; MENU;;
 	esac
@@ -88,16 +90,13 @@ ssh root@$sourceip -p $sourceport "tar -czf /root/network-src.tar.gz /etc/hosts 
 
 # check things and start the swap
 if [ tarchk ]; then
-	dst=grep HWADDR $ifcfg
-	src=ssh root@$sourceip -p $sourport "grep HWADDR $ifcfg"
-	
 	rsync -auv -e "ssh -p $sourceport" root@$sourceip:/root/network-src.tar.gz /root
 	tar -xf /root/network-src.tar.gz -C /
 	ssh root@$sourceip "tar -xf /root/network-dst.tar.gz -C /"
-	
-	
-	cat $ifcfg | sed '/HWADDR/d'
-	ssh root@$sourceip "cat $ifcfg | sed '/HWADDR/d"
+	echo "Check if packages were extracted correctly."
+	read wait
+	#sed -i.bak '/HWADDR/d' $ifcfg
+	#ssh root@$sourceip "sed -i.bak '/HWADDR/d' $ifcfg"
 else
 	echo "Failed. The tarballs were not found. Please restart script"
 	exit
