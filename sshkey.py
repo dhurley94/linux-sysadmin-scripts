@@ -12,7 +12,6 @@ def main():
                                         help="set username to be ssh keyed, defaults to root")                            
         (options, args) = parser.parse_args()
         if (options.sourceip is None):
-               print("You will need to set the source IP\n");
                subprocess.call("python sshkey.py --help", shell=True)
         else:
                genkey="ssh-keygen -t rsa"
