@@ -73,8 +73,8 @@ rsync -auv -e "ssh -p $sourceport" root@sourceip:/root/files.tar.gz /root
 if [ -e /root/files.tar.gz ]; then
 	tar -Cxf / /root/files.tar.gz
 	/scripts/easyapache --build
-	echo "Destination server:  " + php -v + " "  + mysql -V >> match.log
-	echo "Source server: " + $(ssh root@$sourceip -p $sourceport "php -v + mysql -V") >> match.log
+	echo "Destination server:  " + php -v + " "  + mysql -V
+	echo "Source server: " + $(ssh root@$sourceip -p $sourceport "php -v + mysql -V")
 	echo ""
 	echo "cat match.log"
 	printf "\nEnvironment matching has completed. \n"
