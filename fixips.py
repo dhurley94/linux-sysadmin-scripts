@@ -8,7 +8,6 @@ main():
 			setip="whmapi1 setsiteip ip=%s user= %s" % (i, mainip)
 			print(setip)
 			#subprocess.call(setip, shell=True)
-		print("\nAll user accounts are now using the shared IP.")
 		
 	with open('/etc/domainips') as input_file:
 		for i in input_file: # set all dedicated ip cPanel accounts to proper IP
