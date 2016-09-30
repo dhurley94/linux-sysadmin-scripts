@@ -1,4 +1,5 @@
 #!/bin/bash
+# does NOT work
 
 function MENU
 {
