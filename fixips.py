@@ -3,6 +3,10 @@
 # mv /etc/domainips /etc/domainips-src
 # python fixips.py
 
+# use at your own risk
+# and read the above notes 
+# before using this script
+
 import subprocess
 def main():
         f=open('/var/cpanel/mainip', 'r')
