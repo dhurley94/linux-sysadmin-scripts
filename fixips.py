@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# simply pull /etc/trueuserdomains & /etc/domainips from the src server.
+# simply pull /etc/domainips from the src server and rename it to /etc/domainips-src
 # mv /etc/domainips /etc/domainips-src
-# this has not been tested on a production server
 # python fixips.py
+
 import subprocess
 def main():
         f=open('/var/cpanel/mainip', 'r')
