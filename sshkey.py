@@ -15,7 +15,7 @@ def main():
                subprocess.call("python sshkey.py --help", shell=True)
         else:
                genkey="ssh-keygen -t rsa"
-               sendkey="ssh-copy-id -p %s %s@%s" % (options.sourceport, options.user, options.sourceip)
+               sendkey="ssh-copy-id %s@%s -p %s" % (options.user, options.sourceip, options.sourceport)
                subprocess.call(genkey, shell=True)
                subprocess.call(sendkey, shell=True)
 if __name__ == "__main__":
