@@ -37,6 +37,8 @@ gpgcheck=0"""
         if (os.path.isfile(r1_repo)):
              print("Installing R1soft")
              install(options.key)
+			 print("R1soft has been installed.")
+			 print("If you run into issues ensure the kernel up to date.")
         else:
              print("R1soft repo does not exist.")
 
