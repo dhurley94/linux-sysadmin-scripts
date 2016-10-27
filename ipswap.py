@@ -8,7 +8,7 @@ import logging
 def backup(server): # backup all networking related files, iterate w/ src / dst
 	logging.info('Creating tarballs for %s', server)
 	tarballs="tar -czf /root/%s-network.tar.gz /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network /etc/ips /var/cpanel/mainip /etc/hosts" % (server)
-	if (os.path.isfile("/root/%s-network.tar.gz %s", server)):
+	if (os.path.isfile("/root/%s-network.tar.gz", server)):
 		logging.info('tarballs for %s have been created.', server)
 		return 1
 	else:
