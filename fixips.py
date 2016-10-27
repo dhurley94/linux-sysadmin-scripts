@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # simply pull /etc/domainips from the src server and rename it to /etc/domainips-src
-# mv /etc/domainips /etc/domainips-src
+# rsync -avz -e "ssh -p 22" root@192.168.1.100:/etc/domainips /etc/domainips-src
 # python fixips.py
 
 # use at your own risk
