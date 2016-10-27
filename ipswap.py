@@ -35,8 +35,6 @@ def sshkeys(sourceport, sourceip): # create and apply sshkeys
 	# find a way to check if this was successful w/o manual connection
 
 def fixips(sourceport, sourceip): # replaces cPanel ips on new server with old server's
-	grabips="rsync -ave 'ssh -p %s' %s:/etc/domainips /etc/domainips-src" % (sourceport, sourceip)
-	subprocess.call(grabips, shell=True)
 	if (os.path.isfile("/etc/domainips-src")):
 		f=open('/var/cpanel/mainip', 'r')
 			mainip=f.read()
@@ -74,15 +72,17 @@ def main():
                                         help="set bit to run fixips.py after successful IP migration") 										
     (options, args) = parser.parse_args()
     if (options.sourceip is None):
-		subprocess.call("python sshkey.py --help", shell=True)
+	subprocess.call("python sshkey.py --help", shell=True)
     else:
-		# remove existance of old network tarballs from both systems
-		# sshkey
-		# backup on src and dst, verify backup
-		# remove hwaddr/uuid, and regen backup. possibly uncessary
-		# perform network conf swap
-		# verify success
-		# user input on success, if y then fixips
+	grabips="rsync -ave 'ssh -p %s' %s:/etc/domainips /etc/domainips-src" % (sourceport, sourceip)
+	subprocess.call(grabips, shell=True)
+	# remove existance of old network tarballs from both systems
+	# sshkey
+	# remove hwaddr/uuid from dst, create tarball, send to src
+	# create tarball on src, send to dst, remove hwaddr/uuid
+	# perform network conf swap
+	# verify files, restart networking, reload ipaliases, rebuildhttpdconf, etc.
+	# user input on success, if y then fixips
 		
 if __name__ == "__main__":
         main()
