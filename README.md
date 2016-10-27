@@ -7,5 +7,3 @@ collection of scripts that can help with migrating to a new cPanel host
   fixips.py
   
   r1soft.py
-
-  sshkey.py // experiences issues with cent5
