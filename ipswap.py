@@ -10,8 +10,9 @@ def removehw():
 	lines = ifcfg.readlines()
 	ifcfg = open("/etc/sysconfig/network-scripts/ifcfg-eth0","w")
 	for line in lines:
-		if line!="^HWADDR" or line!="^UUID": # doesn't work, only write lines that do not contain HWADDR / UUID
-			ifcfg.write(line)	
+		if line!="^HWADDR" or line!="^UUID": # doesn't work
+			ifcfg.write(line)
+	ifcfg.close()
 
 def sshkeys(sourceport, sourceip):
 	genkey="ssh-keygen -t rsa"
@@ -20,7 +21,7 @@ def sshkeys(sourceport, sourceip):
     subprocess.call(sendkey, shell=True)
 
 def fixips(sourceport, sourceip):
-	grabips="rsync -ave 'ssh -p %s' %s:/etc/domainips /etc/domainips-src" %s (sourceip, sourceport)
+	grabips="rsync -ave 'ssh -p %s' %s:/etc/domainips /etc/domainips-src" % (sourceport, sourceip)
 	subprocess.call(grabips, shell=True)
 	if (os.path.isfile("/etc/domainips-src")):
 		f=open('/var/cpanel/mainip', 'r')
