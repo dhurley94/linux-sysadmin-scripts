@@ -10,10 +10,10 @@ def backup(server): # backup all networking related files, iterate w/ src / dst
 	tarballs="tar -czf /root/%s-network.tar.gz /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network /etc/ips /var/cpanel/mainip /etc/hosts" % (server)
 	if (os.path.isfile("/root/%s-network.tar.gz", server)):
 		logging.info('tarballs for %s have been created.', server)
-		return 1
+		return True
 	else:
 		logging.warning('tarballs for %s have failed. exiting now.', server)
-		return 0
+		return False
 
 def removehw(server): # run this before creating tarballs of network files
 	ifcfg = open("/etc/sysconfig/network-scripts/ifcfg-eth0","r")
