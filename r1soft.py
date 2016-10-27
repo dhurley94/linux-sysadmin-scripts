@@ -1,17 +1,7 @@
-#untested
-
 #!/usr/bin/env python
 import subprocess
 from pathlib import Path
 from optparse import OptionParser
-
-repo="
-[r1soft]
-name=R1Soft Repository Server
-baseurl=http://repo.r1soft.com/yum/stable/$basearch/
-enabled=1
-gpgcheck=0
-"
 
 def install(key):
 	intall = "yum -y install serverbackup-enterprise-agent"
@@ -24,7 +14,7 @@ def install(key):
 	subprocess.call(cdprestart, shell=True)
 
 def main():
-    usage = "usage: python %prog [options] arg"
+	usage = "usage: python %prog [options] arg"
     parser = OptionParser(usage) 
     parser.add_option("-k", "--keys", dest="key", type=str,
                                         help="set r1soft server ip")                                
@@ -52,3 +42,6 @@ gpgcheck=0"
 			install(key)
 		else:
 			printf("R1soft repo does not exist.")
+			
+if __name__ == "__main__":
+        main()
