@@ -1,6 +1,4 @@
 # in progress, do not use
-# script is becoming overly complex for such a simple task.
-# possibly remove version checking
 #!/usr/bin/env python
 import subprocess
 from optparse import OptionParser
@@ -11,7 +9,7 @@ def getphpversion():
 def getsqlversion():
 	return subprocess.check_output("whmapi1 current_mysql_version")
 
-def versionlists(isini):
+def versionlists(isini): # only checks dst
 	if (isini): # before matching
 		versionlist.append(1, "php", getphpversion())
 		versionlist.append(1, "sql", getsqlversion())
@@ -21,11 +19,13 @@ def versionlists(isini):
 def match(sourceip, sourceport):
 	mktar="tar -czf environment.tar.gz /usr/local/lib/php.ini /etc/my.cnf /var/cpanel/easy/apache/profile/_la st_success.yaml /var/cpanel/easy/apache/profile/_main.yaml"
 	grabballs="rsync -ave 'ssh -p %s' %s:/root/environment.tar.gz /root" % (sourceport, sourceip)
-	if (os.path.isfile("/root/environment.tar.gz")):
+	try: 
+		subprocess.call(grabballs, shell=True)
+	except Exception:
+		print("importing the tarballs failed.")
+	else:
 		subprocess.call("tar -xf environment.tar.gz -C /", shell=True)
 		subprocess.call("/scripts/easyapache --build", shell=True)
-	else:
-		subprocess.call("python environmentmatch.py --help", shell=True)
 
 def main():
 	versionlist = list()
