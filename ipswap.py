@@ -19,7 +19,7 @@ def removehw(server): # rewrites ifcfg w/o hwaddr/uuid
 	ifcfg = open("/etc/sysconfig/network-scripts/ifcfg-eth0","r+")
 	lines = ifcfg.readlines()
 	for line in lines:
-		if "HWADDR" not in line or "UUID" not in line:
+		if ("HWADDR" not in line or "UUID" not in line):
 			ifcfg.write(line)
 		logging.info('MAC has been removed from %s ifcfg.', server)
 	ifcfg.close()
