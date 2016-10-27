@@ -29,9 +29,9 @@ def removehw(server): # run this before creating tarballs of network files
 
 def sshkeys(sourceport, sourceip): # create and apply sshkeys
 	genkey="ssh-keygen -t rsa"
-    sendkey="ssh-copy-id -p %s %s" % (sourceport, sourceip)
-    subprocess.call(genkey, shell=True)
-    subprocess.call(sendkey, shell=True)
+	sendkey="ssh-copy-id -p %s %s" % (sourceport, sourceip)
+	subprocess.call(genkey, shell=True)
+	subprocess.call(sendkey, shell=True)
 	# find a way to check if this was successful w/o manual connection
 
 def fixips(sourceport, sourceip): # replaces cPanel ips on new server with old server's
@@ -41,23 +41,23 @@ def fixips(sourceport, sourceip): # replaces cPanel ips on new server with old s
 			print("setting all cPanel accounts to default shared ip.\n")
 			with open('/etc/trueuserdomains') as input_file:
 				for i in input_file: # set all cPanel accounts to default main ip
-                        i=i.split()
-                        print("\n%s -> %s" % (i[1], mainip))
-                        setip="whmapi1 setsiteip ip=%s user=%s" % (mainip, i[1])
-                        subprocess.call(setip, shell=True)
-						logging.info("\n%s -> %s", i[1], mainip)
-			print("\n\n\n")
-			print("setting dedicated ip cPanel accounts to correct ip.\n")
-			with open('/etc/domainips-src') as input_file:
-                next(input_file)
-                for i in input_file: # set all dedicated ip cPanel accounts to proper IP
-                        i=i.split()
-                        i[0]=i[0].replace(':','')
-                        i[1]=i[1].replace(' ','')
-                        print("\n%s -> %s" % (i[1], i[0]))
-                        setip="whmapi1 setsiteip ip=%s domain=%s" % (i[0], i[1])
-                        subprocess.call(setip, shell=True)
-						logging.info("\n%s -> %s", i[1], i[0]) # chk json and verify success before logging
+                        		i=i.split()
+                        		print("\n%s -> %s" % (i[1], mainip))
+                        		setip="whmapi1 setsiteip ip=%s user=%s" % (mainip, i[1])
+                        		subprocess.call(setip, shell=True)
+					logging.info("\n%s -> %s", i[1], mainip)
+					print("\n\n\n")
+					print("setting dedicated ip cPanel accounts to correct ip.\n")
+		with open('/etc/domainips-src') as input_file:
+                	next(input_file)
+                	for i in input_file: # set all dedicated ip cPanel accounts to proper IP
+                        	i=i.split()
+                        	i[0]=i[0].replace(':','')
+                        	i[1]=i[1].replace(' ','')
+                        	print("\n%s -> %s" % (i[1], i[0]))
+                        	setip="whmapi1 setsiteip ip=%s domain=%s" % (i[0], i[1])
+                        	subprocess.call(setip, shell=True)
+				logging.info("\n%s -> %s", i[1], i[0]) # chk json and verify success before logging
 	# take json output and parse to log file / verify success
 
 def main():
