@@ -17,9 +17,7 @@ def main():
     usage = "usage: python %prog [options] arg"
     parser = OptionParser(usage)
     parser.add_option("-k", "--keys", dest="key", type=str,
-                                        help="set r1soft server ip")
-    parser.add_option("-r", "--repo", dest="createrepo", default="1",
-                                        help="create repo, set to 1/0. defaults to 1")
+                                        help="set r1soft server ip.\npython r1soft.py -k 192.168.1.100")
     (options, args) = parser.parse_args()
 
     if (options.key is None):
