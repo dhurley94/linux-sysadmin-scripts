@@ -23,12 +23,14 @@ def match(sourceip, sourceport):
 		subprocess.call(grabballs, shell=True)
 	except Exception:
 		print("importing the tarballs failed.")
+		return False
 	else:
 		subprocess.call("tar -xf environment.tar.gz -C /", shell=True)
 		subprocess.call("/scripts/easyapache --build", shell=True)
+		return True
 
 def main():
-	versionlist = list()
+    versionlist = list()
     usage = "usage: python %prog [options] arg"
     parser = OptionParser(usage) 
     parser.add_option("-s", "--source", dest="sourceip", type=str,
