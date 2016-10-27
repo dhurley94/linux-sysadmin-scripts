@@ -11,8 +11,6 @@ def main():
                                         help="set the source ip address.")
         parser.add_option("-p", "--port", dest="sourceport", default="22",
                                         help="set port, defaults to 22 if not set")
-        parser.add_option("-i", "--ipfix", dest="fixipVar", default="0",
-                                        help="set bit to run fixips.py after successful IP migration")
         (options, args) = parser.parse_args()
         grabips="rsync -ave 'ssh -p %s' %s:/etc/domainips /etc/domainips-src" % (options.sourceport, options.sourceip)
         subprocess.call(grabips, shell=True)
