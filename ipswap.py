@@ -15,7 +15,7 @@ def backup(server): # backup all networking related files, iterate w/ src / dst
 		logging.warning('tarballs for %s have failed. exiting now.', server)
 		return False
 
-def removehw(server): # create tarballs before running this, run and verify uuid/hwaddr was removed
+def removehw(server): # rewrites ifcfg w/o hwaddr/uuid
 	ifcfg = open("/etc/sysconfig/network-scripts/ifcfg-eth0","r+")
 	lines = ifcfg.readlines()
 	for line in lines:
