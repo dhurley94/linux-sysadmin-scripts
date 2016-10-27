@@ -1,39 +1,14 @@
 # in progress, do not use
-# script is becoming overly complex for such a simple task.
-# possibly remove version checking
+# has enviro checking
 #!/usr/bin/env python
 import subprocess
 from optparse import OptionParser
 import os
-import MySQLdb
 
-def getphpversion(server, sourceip, sourceport):
-	# may not be needed as php version isn't extremely important atm
-	try :
-		if (server == "dst"):
-			dstphp = subprocess.check_output(["php", "-v"])
-			return True
-		elif (server == "src":
-			# remote ssh cmd
-			# https://github.com/paramiko/paramiko
-			return True
-	except:
-		return False
-
-def getsqlversion(server, dbpass, sourceip, sourceport): # requires remote root mysql user for src
-	# add try / except
-	if (server == "dst"):
-		db = MySQLdb.connect(host="localhost",
-						user="root",
-						passwd=dbpass)
-	elif (server == "src":
-		db = MySQLdb.connect(host=sourceip,
-						user="root",
-						passwd=dbpass)
-		cur=db.cursor()
-	version = cur.execute("SELECT VERSION()")
-	cur.close()
-	return version
+def getphpversion():
+	return subprocess.check_output("whmapi1 php_get_handlers")
+def getsqlversion():
+	return subprocess.check_output("whmapi1 current_mysql_version")
 
 def match(sourceip, sourceport):
 	mktar="tar -czf environment.tar.gz /usr/local/lib/php.ini /etc/my.cnf /var/cpanel/easy/apache/profile/_la st_success.yaml /var/cpanel/easy/apache/profile/_main.yaml"
@@ -57,6 +32,16 @@ def main():
     if (options.sourceip is None):
 		subprocess.call("python environmentmatch.py --help", shell=True)
     else:
+		# find a way to run func on src
+		# find a better way to do this hardcoded bs
+		iniphpdst=getphpversion()
+		inimysqldst=getsqlversion()
+		#inimysqlsrc=getsqlversion()
+		#iniphpsrc=getphpversion()
 		match(options.sourceip, options.sourceport)		
+		newphpdst=getphpversion()
+		newmysqldst=getsqlversion()
+		#newphpsrc=getphpversion()
+		#newmysqlsrc=getsqlversion()
 if __name__ == "__main__":
         main()
