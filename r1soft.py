@@ -45,10 +45,14 @@ gpgcheck=0"""
         r1soft.write(repo)
         r1soft.close()
         if (os.path.isfile(r1_repo)):
-             print("Installing R1soft")
-             install(options.key)
-			 print("R1soft has been installed.")
-			 print("If you run into issues ensure the kernel up to date.")
+        	print("Installing R1soft")
+        	install(options.key)
+		#implement module checking
+		#if (os.path.isdir(/lib/modules/r1soft)):
+		#	print("R1soft has been installed.")
+		#	print("If you run into issues ensure the kernel up to date.")
+		print("R1soft has been installed.")
+		print("If you run into issues ensure the kernel up to date.")
         else:
              print("R1soft repo does not exist.")
 
