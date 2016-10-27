@@ -6,7 +6,7 @@ import os
 
 def match(sourceip, sourceport):
 	mktar="tar -czf environment.tar.gz /usr/local/lib/php.ini /etc/my.cnf /var/cpanel/easy/apache/profile/_la st_success.yaml /var/cpanel/easy/apache/profile/_main.yaml"
-	grabballs="rsync -ave 'ssh -p %s' %s:/root/environment.tar.gz /root" %s (sourceip, sourceport)
+	grabballs="rsync -ave 'ssh -p %s' %s:/root/environment.tar.gz /root" % (sourceport, sourceip)
 	if (os.path.isfile("/root/environment.tar.gz")):
 		subprocess.call("tar -xf environment.tar.gz -C /", shell=True)
 		subprocess.call("/scripts/easyapache --build", shell=True)
