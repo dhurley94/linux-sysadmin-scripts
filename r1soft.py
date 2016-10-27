@@ -3,6 +3,16 @@ import subprocess
 import os
 from optparse import OptionParser
 
+#def csf(iscpanel):
+#	cd /usr/src
+#	wget https://download.configserver.com/csf.tgz
+#	tar -xzf csf.tgz
+#	cd csf
+#	if (iscpanel==1):
+#		sh install.cpanel.sh
+#	else:
+#		sh install.sh 
+	
 def install(key):
     install = "yum -y install serverbackup-enterprise-agent"
     addkey="serverbackup-setup --get-key=http://%s"  % (key)
