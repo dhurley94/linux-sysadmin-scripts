@@ -20,12 +20,10 @@ def removehw(server): # run this before creating tarballs of network files
 	lines = ifcfg.readlines()
 	ifcfg = open("/etc/sysconfig/network-scripts/ifcfg-eth0","w")
 	for line in lines:
-		if line!="^HWADDR" or line!="^UUID": # doesn't work, only write information that is not uuid / hwaddr in ifcfg
+		if "HWADDR" not in line or "UUID" not in line:
 			ifcfg.write(line)
-			logging.info('MAC has been removed from %s.', server)
+		logging.info('MAC has been removed from %s ifcfg.', server)
 	ifcfg.close()
-	# found a 3rd party pkg that will run this function on external server
-	# consider using sed
 
 def sshkeys(sourceport, sourceip): # create and apply sshkeys
 	genkey="ssh-keygen -t rsa"
