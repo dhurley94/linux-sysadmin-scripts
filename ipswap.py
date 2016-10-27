@@ -2,6 +2,13 @@
 import subprocess
 from optparse import OptionParser
 
+def sshkeys(){
+	genkey="ssh-keygen -t rsa"
+    sendkey="ssh-copy-id -p %s %s" % (options.sourceport, options.sourceip)
+    subprocess.call(genkey, shell=True)
+    subprocess.call(sendkey, shell=True)
+}
+
 def fixips() {
 	f=open('/var/cpanel/mainip', 'r')
         mainip=f.read()
