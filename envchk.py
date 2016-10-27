@@ -1,20 +1,36 @@
 # in progress, do not use
-# script w/ php, db version chk removed
 #!/usr/bin/env python
 import subprocess
 from optparse import OptionParser
 import os
-import logging
 
+def getphpversion():
+	return subprocess.check_output("whmapi1 php_get_handlers")
+def getsqlversion():
+	return subprocess.check_output("whmapi1 current_mysql_version")
+
+def versionlists(isini): # only checks dst
+	if (isini): # before matching
+		versionlist.append(1, "php", getphpversion())
+		versionlist.append(1, "sql", getsqlversion())
+	else: # after matching
+		versionlist.append(0, "php", getphpversion())
+		versionlist.append(0, "sql", getsqlversion())
 def match(sourceip, sourceport):
 	mktar="tar -czf environment.tar.gz /usr/local/lib/php.ini /etc/my.cnf /var/cpanel/easy/apache/profile/_la st_success.yaml /var/cpanel/easy/apache/profile/_main.yaml"
-	grabballs="rsync -avze 'ssh -p %s' %s:/root/environment.tar.gz /root" % (sourceport, sourceip)
-	if (os.path.isfile("/root/environment.tar.gz")):
-		logging.info("tarball has successfully been downloaded to dst.")
+	grabballs="rsync -ave 'ssh -p %s' %s:/root/environment.tar.gz /root" % (sourceport, sourceip)
+	try: 
+		subprocess.call(grabballs, shell=True)
+	except Exception:
+		print("importing the tarballs failed.")
+		return False
+	else:
+		subprocess.call("tar -xf environment.tar.gz -C /", shell=True)
+		subprocess.call("/scripts/easyapache --build", shell=True)
 		return True
 
 def main():
-    logging.basicConfig(filename='envchk.log',level=logging.DEBUG)
+    versionlist = list()
     usage = "usage: python %prog [options] arg"
     parser = OptionParser(usage) 
     parser.add_option("-s", "--source", dest="sourceip", type=str,
@@ -25,17 +41,12 @@ def main():
     if (options.sourceip is None):
 		subprocess.call("python environmentmatch.py --help", shell=True)
     else:
-		match(options.sourceip, options.sourceport)
-		if (match()):
-			logging.info("uncompressing environment configs.")
-			subprocess.call("tar -xf environment.tar.gz -C /", shell=True)
-			logging.info("building easyapache.")
-			subprocess.call("/scripts/easyapache --build", shell=True)
-			logging.info("needful has been completed.")
-			print("\n2ez4\n2sbz\n")
-		else:
-			print("\nFailed to create tarball.")
-			logging.info("unable to needful.")
-		
+		versionlists(1)
+		for i in versionlist:
+			print i
+		match(options.sourceip, options.sourceport)		
+		versionlists(0)
+		for i in versionlist:
+			print i
 if __name__ == "__main__":
         main()
