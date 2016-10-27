@@ -10,7 +10,7 @@ def removehw():
 	lines = ifcfg.readlines()
 	ifcfg = open("/etc/sysconfig/network-scripts/ifcfg-eth0","w")
 	for line in lines:
-		if line!="^HWADDR" or line!="^UUID": # doesn't work
+		if line!="^HWADDR" or line!="^UUID": # doesn't work, only write lines that do not contain HWADDR / UUID
 			ifcfg.write(line)	
 
 def sshkeys(sourceport, sourceip):
