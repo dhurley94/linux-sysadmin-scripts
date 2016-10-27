@@ -1,5 +1,6 @@
 # in progress, do not use
-# has enviro checking
+# script is becoming overly complex for such a simple task.
+# possibly remove version checking
 #!/usr/bin/env python
 import subprocess
 from optparse import OptionParser
@@ -10,6 +11,13 @@ def getphpversion():
 def getsqlversion():
 	return subprocess.check_output("whmapi1 current_mysql_version")
 
+def versionlists(isini):
+	if (isini): # before matching
+		versionlist.append(1, "php", getphpversion())
+		versionlist.append(1, "sql", getsqlversion())
+	else: # after matching
+		versionlist.append(0, "php", getphpversion())
+		versionlist.append(0, "sql", getsqlversion())
 def match(sourceip, sourceport):
 	mktar="tar -czf environment.tar.gz /usr/local/lib/php.ini /etc/my.cnf /var/cpanel/easy/apache/profile/_la st_success.yaml /var/cpanel/easy/apache/profile/_main.yaml"
 	grabballs="rsync -ave 'ssh -p %s' %s:/root/environment.tar.gz /root" % (sourceport, sourceip)
@@ -20,28 +28,23 @@ def match(sourceip, sourceport):
 		subprocess.call("python environmentmatch.py --help", shell=True)
 
 def main():
+	versionlist = list()
     usage = "usage: python %prog [options] arg"
     parser = OptionParser(usage) 
     parser.add_option("-s", "--source", dest="sourceip", type=str,
                                         help="set the source ip address.")                                
     parser.add_option("-p", "--port", dest="sourceport", default="22",
                                         help="set port, defaults to 22 if not set")	
-	parser.add_option("-r", "--dbpass", dest="dbpass", type=str,
-                                        help="set mysql root user pass, if set.")
     (options, args) = parser.parse_args()
     if (options.sourceip is None):
 		subprocess.call("python environmentmatch.py --help", shell=True)
     else:
-		# find a way to run func on src
-		# find a better way to do this hardcoded bs
-		iniphpdst=getphpversion()
-		inimysqldst=getsqlversion()
-		#inimysqlsrc=getsqlversion()
-		#iniphpsrc=getphpversion()
+		versionlists(1)
+		for i in versionlist:
+			print i
 		match(options.sourceip, options.sourceport)		
-		newphpdst=getphpversion()
-		newmysqldst=getsqlversion()
-		#newphpsrc=getphpversion()
-		#newmysqlsrc=getsqlversion()
+		versionlists(0)
+		for i in versionlist:
+			print i
 if __name__ == "__main__":
         main()
