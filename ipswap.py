@@ -1,4 +1,3 @@
-#unfinished
 #!/usr/bin/env python
 import subprocess
 from optparse import OptionParser
@@ -64,7 +63,7 @@ def fixips(sourceport, sourceip): # replaces cPanel ips on new server with old s
 	# take json output and parse to log file / verify success
 
 def main():
-	logging.basicConfig(filename='ipswap.log',level=logging.DEBUG)
+    logging.basicConfig(filename='ipswap.log',level=logging.DEBUG)
     usage = "usage: python %prog [options] arg"
     parser = OptionParser(usage) 
     parser.add_option("-s", "--source", dest="sourceip", type=str,
