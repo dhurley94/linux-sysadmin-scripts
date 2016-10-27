@@ -4,9 +4,9 @@ from optparse import OptionParser
 
 def sshkeys(){
 	genkey="ssh-keygen -t rsa"
-    sendkey="ssh-copy-id -p %s %s" % (options.sourceport, options.sourceip)
-    subprocess.call(genkey, shell=True)
-    subprocess.call(sendkey, shell=True)
+	sendkey="ssh-copy-id -p %s %s" % (options.sourceport, options.sourceip)
+	subprocess.call(genkey, shell=True)
+	subprocess.call(sendkey, shell=True)
 }
 
 def fixips() {
