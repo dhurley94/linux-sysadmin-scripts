@@ -12,6 +12,9 @@ def main():
         parser.add_option("-p", "--port", dest="sourceport", default="22",
                                         help="set port, defaults to 22 if not set")
         (options, args) = parser.parse_args()
+        if (options.sourceip is None):
+                print("You must provide an IP address.")
+                quit()
         grabips="rsync -ave 'ssh -p %s' %s:/etc/domainips /etc/domainips-src" % (options.sourceport, options.sourceip)
         subprocess.call(grabips, shell=True)
         if (os.path.isfile("/etc/domainips-src")):
