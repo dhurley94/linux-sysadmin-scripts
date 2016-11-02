@@ -23,7 +23,7 @@ def main():
                 mainip=f.read()
                 try:
                     input_file=open('/etc/trueuserdomains','r')
-                    for i in input_file.readline():  # set all cPanel accounts to default main ip
+                    for i in input_file:  # set all cPanel accounts to default main ip
                         i = i.split()
                         print("\n%s -> %s\n" % (i[1], mainip))
                         setip = "whmapi1 setsiteip ip=%s user=%s" % (mainip, i[1])
@@ -49,15 +49,6 @@ def main():
                         subprocess.call(setip, shell=True)
                 finally:
                     input_file.close()
-                #with open('/etc/domainips-src') as input_file:
-                #        next(input_file)
-                #        for i in input_file: # set all dedicated ip cPanel accounts to proper IP
-                #                i=i.split()
-                #                i[0]=i[0].replace(':','')
-                #                i[1]=i[1].replace(' ','')
-                #                print("\n%s -> %s\n" % (i[1], i[0]))
-                #                setip="whmapi1 setsiteip ip=%s domain=%s" % (i[0], i[1])
-                #                subprocess.call(setip, shell=True)
                 print('2ez42sbz')
 if __name__ == "__main__":
     main()
