@@ -28,12 +28,11 @@ def main():
             mainip=f.read()
             try:
                 input_file=open('/etc/trueuserdomains','r')
-                for i in input_file.readline():  # set all cPanel accounts to default main ip
+                for i in input_file:  # set all cPanel accounts to default main ip
                     i = i.split()
                     print("\n%s -> %s\n" % (i[1], mainip))
                     setip = "whmapi1 setsiteip ip=%s user=%s" % (mainip, i[1])
                     subprocess.call(setip, shell=True)
-                    print("setting all cPanel accounts to default shared ip.\n")
             finally:
                     input_file.close()
             try:
