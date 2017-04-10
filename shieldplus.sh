@@ -22,3 +22,5 @@ wget http://www.rfxn.com/downloads/maldetect-current.tar.gz
 tar -xvf maldetect-current.tar.gz
 cd maldet-*
 sh install.sh
+
+cd ~
