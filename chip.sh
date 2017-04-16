@@ -28,23 +28,6 @@ Ex: ./chip.sh -s 127.0.0.1 -k 1
 	exit 1
 }
 
-setup_sshkey() { # generate keys and push to source
-	ssh-keygen -t rsa
-	ssh-copy-id -p $sourceport root@$sourceip
-	sshkey=0
-	echo; echo
-}
-
-tarchk() { # verify tarballs exist on source & destination
-	if [ -e /root/network-dst.tar.gz ] && [ ssh $sourceip -p $sourceport "-e /root/network-src.tar.gz" ]; then return true; else return false; fi
-}
-
-revert() { # doesn't really work yet
-	echo 'REVERT FUNC'
-    tar -xf /root/network-dst.tar.gz -C /
-	ssh root@$sourceip "tar -xf /root/network-src.tar.gz -C /"
-}
-
 while getopts ":s:p:k:h" opt; do
 	case $opt in		
 		s)
@@ -75,7 +58,7 @@ done
 
 if [[ `whoami` != "root" ]] # verifying root login
 then
-   echo "You'll to be root."
+   echo "You're not root."
    exit 1
 fi
 
@@ -83,22 +66,38 @@ if [[ $# -eq 0 || -z $sourceip ]]; then MENU; fi  # check for existence of requi
 if [ -z $sourceport ]; then sourceport=22; fi # apply port 22 if none is set
 if [ ! -z $sshkey ]; then setup_sshkey; fi # gen ssh key if not set
 
-ifcfg="/etc/sysconfig/network-scripts/ifcfg-eth0"
 
-# create tars
+setup_sshkey() { # generate keys and push to source
+	ssh-keygen -t rsa
+	ssh-copy-id -p $sourceport root@$sourceip
+	sshkey=0
+	echo; echo
+}
+
+$ifcfg = "/etc/sysconfig/network-scripts/ifcfg-eth0"
+
+# remove uuid from dst before created tarballs for source
+sed '/HWADDR/d' $ifcfg 
+sed '/UUID/d' $ifcfg
+
+# create tars and work magic
 tar -czf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip
 ssh root@$sourceip -p $sourceport "tar -czf /root/network-src.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip"
+rsync -avz -e "ssh -p '$sourceport'" root@$sourceip:/root/network-src.tar.gz /root/
+rsync -avz -e "ssh -p '$sourceport'" root@$sourceip:/etc/domainips /etc/domainips-src
+rsync -avz -e "ssh -p '$sourceport'" /root/network-dst.tar.gz root@$sourceip:/root/
 
-# check things and start the swap
-if [ tarchk ]; then
-	rsync -auv -e "ssh -p $sourceport" root@$sourceip:/root/network-src.tar.gz /root
-	tar -xf /root/network-src.tar.gz -C /
-	ssh root@$sourceip "tar -xf /root/network-dst.tar.gz -C /"
-	echo "Check if packages were extracted correctly."
-	read wait
-	#sed -i.bak '/HWADDR/d' $ifcfg
-	#ssh root@$sourceip "sed -i.bak '/HWADDR/d' $ifcfg"
-else
-	echo "Failed. The tarballs were not found. Please restart script"
-	exit
-fi 
+# remove uuid from dst before created tarballs for source
+tar -xf network-src.tar.gz -C /
+sed '/HWADDR/d' $ifcfg 
+sed '/UUID/d' $ifcfg
+
+echo "Please triple check and verify everything is correct.\nThen restart networking on both systems\n."
+pause
+
+echo "\n\n if IP swap was successful run this. Verify correct default IP in basic on dst."
+if [[ -e /etc/domainips-src ]]; then
+	wget https://raw.githubusercontent.com/dhurley94/ip-swap/master/fixips.py
+	python fixips.py
+fi
+
