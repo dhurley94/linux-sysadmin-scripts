@@ -94,10 +94,3 @@ sed '/UUID/d' $ifcfg
 
 echo "Please triple check and verify everything is correct.\nThen restart networking on both systems\n."
 pause
-
-echo "\n\n if IP swap was successful run this. Verify correct default IP in basic on dst."
-if [[ -e /etc/domainips-src ]]; then
-	wget https://raw.githubusercontent.com/dhurley94/ip-swap/master/fixips.py
-	python fixips.py
-fi
-
