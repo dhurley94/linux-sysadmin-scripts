@@ -93,4 +93,4 @@ sed '/HWADDR/d' $ifcfg
 sed '/UUID/d' $ifcfg
 
 echo "Please triple check and verify everything is correct.\nThen restart networking on both systems\n."
-pause
+read
