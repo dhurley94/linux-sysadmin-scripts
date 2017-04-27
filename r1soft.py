@@ -3,15 +3,11 @@ import subprocess
 import os
 from optparse import OptionParser
 
-#def csf(iscpanel):
-#	cd /usr/src
-#	wget https://download.configserver.com/csf.tgz
-#	tar -xzf csf.tgz
-#	cd csf
-#	if (iscpanel==1):
-#		sh install.cpanel.sh
-#	else:
-#		sh install.sh 
+def shieldplus():
+	subprocess.call("wget https://raw.githubusercontent.com/dhurley94/ip-swap/master/shieldplus.sh", shell=True)
+	subprocess.call("sh shieldplus.sh")
+	# do making and create random pw has and provide sudoer
+	# would be kinda cool
 	
 def install(key):
     install = "yum -y install serverbackup-enterprise-agent"
@@ -26,6 +22,8 @@ def install(key):
 def main():
     usage = "usage: python %prog [options] arg"
     parser = OptionParser(usage)
+    parser.add_option("-s", "--shield", dest="shield", type=int,
+                                        help="default 0, put 1 for shiledplus install")
     parser.add_option("-k", "--keys", dest="key", type=str,
                                         help="set r1soft server ip.\npython r1soft.py -k 192.168.1.100")
     (options, args) = parser.parse_args()
@@ -55,6 +53,7 @@ gpgcheck=0"""
 		print("If you run into issues ensure the kernel up to date.")
         else:
              print("R1soft repo does not exist.")
-
+    if (options.shield == 1):
+	shieldplus()
 if __name__ == "__main__":
         main()
