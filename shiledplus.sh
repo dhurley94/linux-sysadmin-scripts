@@ -16,4 +16,9 @@ tar -xvzf maldetect-current.tar.gz
 cd maldet-*
 sh install.sh
 
-/usr/sbin/useradd -p `date +%s | sha256sum | base64 | head -c 16; echo;` singlehop
+PASS = date +%s | sha256sum | base64 | head -c 16;
+
+useradd -p $PASS singlehop
+usermod -G wheel singlehop
+echo "singlehop"
+echo $PASS
