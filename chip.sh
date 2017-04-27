@@ -68,10 +68,9 @@ if [ ! -z $sshkey ]; then setup_sshkey; fi # gen ssh key if not set
 
 
 setup_sshkey() { # generate keys and push to source
-	ssh-keygen -t rsa
-	ssh-copy-id -p $sourceport root@$sourceip
-	sshkey=0
-	echo; echo
+	wget https://raw.githubusercontent.com/dhurley94/ip-swap/master/sshkey.py
+	python sshkey.py -s $sourceip -p $sourceport
+	echo "duhn"; echo
 }
 
 $ifcfg = "/etc/sysconfig/network-scripts/ifcfg-eth0"
@@ -85,12 +84,15 @@ tar -czf /root/network-dst.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /et
 ssh root@$sourceip -p $sourceport "tar -czf /root/network-src.tar.gz /etc/hosts /etc/ips /etc/sysconfig/network /etc/sysconfig/network-scripts/ifcfg-eth0 /var/cpanel/mainip"
 rsync -avz -e "ssh -p '$sourceport'" root@$sourceip:/root/network-src.tar.gz /root/
 rsync -avz -e "ssh -p '$sourceport'" root@$sourceip:/etc/domainips /etc/domainips-src
-rsync -avz -e "ssh -p '$sourceport'" /root/network-dst.tar.gz root@$sourceip:/root/
+rsync -avz -e "ssh -p '$sourceport'" /root/network-dst.tar.gz root@$sourceip:/root/network-dst.tar.gz
 
-# remove uuid from dst before created tarballs for source
-tar -xf network-src.tar.gz -C /
-sed '/HWADDR/d' $ifcfg 
-sed '/UUID/d' $ifcfg
-
-echo "Please triple check and verify everything is correct.\nThen restart networking on both systems\n."
-read
+if [[ -e /root/network-dst.tar.gz ]] -a [[ /root/network-src.tar.gz ]]; then
+	# remove uuid from dst before created tarballs for source
+	tar -xf network-src.tar.gz -C /
+	sed '/HWADDR/d' $ifcfg 
+	sed '/UUID/d' $ifcfg
+	echo "Please triple check and verify everything is correct.\nThen restart networking on both systems\n."
+	read
+else
+	echo "ha broke"
+fi
