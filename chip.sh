@@ -88,7 +88,8 @@ rsync -avz -e "ssh -p '$sourceport'" /root/network-dst.tar.gz root@$sourceip:/ro
 
 if [[ -e /root/network-dst.tar.gz ]] -a [[ /root/network-src.tar.gz ]]; then
 	# remove uuid from dst before created tarballs for source
-	tar -xf network-src.tar.gz -C /
+	ssh root@$sourceip -p $sourceport "tar -xf network-dst.tar.gz -C /"
+	tar -xf network-src.tar.gz -C /"
 	sed '/HWADDR/d' $ifcfg 
 	sed '/UUID/d' $ifcfg
 	echo "Please triple check and verify everything is correct.\nThen restart networking on both systems\n."
