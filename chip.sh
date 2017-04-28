@@ -1,6 +1,15 @@
 #!/bin/bash
 # be careful, and dont run blindly.
 
+# replace mac rather than removing. removing hwaddr on centos7 apparently changes the interface name to new convention
+#MACID=`ip a l | grep <eth0ip> -B1 | grep ether | awk {'print$2'}`
+#if sed -i -e 's/.*HWADDR.*/HWADDR=${MACID}/' /etc/sysconfig/blahblah; then
+#echo "Yay we replaced the macid"
+#else
+#echo "HWADDR=${MACID}" >> /etc/sysconfig/blahblah
+#echo "HWADDR didn't exist so I added it"
+#fi
+
 function MENU
 {
    echo "
