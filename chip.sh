@@ -53,11 +53,6 @@ while getopts ":s:p:k:h" opt; do
 			MENU
 			flag="h"
 			;;
-		r)
-			MENU
-			flag="r"
-			revert
-			;;;
 		\?) echo "invalid option: -$OPTARG"; echo; MENU;;
 		:) echo "option -$OPTARG requires an argument."; echo; MENU;;
 	esac
@@ -72,13 +67,6 @@ fi
 if [[ $# -eq 0 || -z $sourceip ]]; then MENU; fi  # check for existence of required var
 if [ -z $sourceport ]; then sourceport=22; fi # apply port 22 if none is set
 if [ ! -z $sshkey ]; then setup_sshkey; fi # gen ssh key if not set
-
-
-setup_sshkey() { # generate keys and push to source
-	wget https://raw.githubusercontent.com/dhurley94/ip-swap/master/sshkey.py
-	python sshkey.py -s $sourceip -p $sourceport
-	echo "duhn"; echo
-}
 
 $ifcfg = "/etc/sysconfig/network-scripts/ifcfg-eth0"
 
