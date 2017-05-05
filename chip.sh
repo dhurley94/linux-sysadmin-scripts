@@ -87,10 +87,12 @@ rsync -avz -e "ssh -p '$sourceport'" root@$sourceip:/etc/domainips /etc/domainip
 rsync -avz -e "ssh -p '$sourceport'" /root/network-dst.tar.gz root@$sourceip:/root/network-dst.tar.gz
 
 if [[ -e /root/network-dst.tar.gz ]] -a [[ -e /root/network-src.tar.gz ]]; then
-  if [[]] ## if hwaddr or uuid exist ifcfg, replace with eth0 data
-    echo "HWADDR=" ip a l | grep IPADDR $ifcfg | egrep -o '(".*?")' | sed 's/\"//g' -B1 | grep ether | awk {'print$2'}
-  else ## add if it doesnt exist in ifcfg
-    echo "HWADDR=" ip a l | grep IPADDR $ifcfg | egrep -o '(".*?")' -B1 | grep ether | awk{'print$2'}
+  if [[ $ifcfg == *"UUID"* ]] -a  [[ $ifcfg == *"IPADDR"* ]]## if hwaddr or uuid exist ifcfg, replace with eth0 data
+    sed '/HWADDR/d' $ifcfg
+    sed '/UUID/d' $ifcfg
+    cat "HWADDR=" ip a l | grep IPADDR $ifcfg | egrep -o '(".*?")' | sed 's/\"//g' -B1 | grep ether | awk {'print$2'} >> $ifcfg
+  else ## may need elif
+    cat "HWADDR=" ip a l | grep IPADDR $ifcfg | egrep -o '(".*?")' -B1 | grep ether | awk{'print$2'} >> $ifcfg
   fi
 fi
 
