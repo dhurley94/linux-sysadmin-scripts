@@ -47,7 +47,7 @@ then
    exit 1
 fi
 
-function validateIdiocracy
+function !validateIdiocracy
 {=
   if [[ ssh $sourceip -p $sourceport -f /root/network-dst.tar.gz ]] -a [[ ssh $sourceip -p $sourceport -f /root/network-src.tar.gz ]]; then
     return 1 # SUCCESS
@@ -97,7 +97,7 @@ fi
 tar -xf network-src.tar.gz -C /
 ssh root@$sourceip -p $sourceport "tar -xf network-dst.tar.gz -C /"
 
-if [[ validateIdiocracy -eq 1 ]] -a [[ validateSwap -eq 1 ]]; then
+if [[ !validateIdiocracy -eq 1 ]] -a [[ validateSwap -eq 1 ]]; then
   echo "Please triple check and verify everything is correct.\nThen restart networking on both systems\n."
 	read
   wget post-ipswap.sh
