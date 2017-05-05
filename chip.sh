@@ -87,7 +87,7 @@ rsync -avz -e "ssh -p '$sourceport'" root@$sourceip:/etc/domainips /etc/domainip
 rsync -avz -e "ssh -p '$sourceport'" /root/network-dst.tar.gz root@$sourceip:/root/network-dst.tar.gz
 
 if [[ -e /root/network-dst.tar.gz ]] -a [[ -e /root/network-src.tar.gz ]]; then
-  if [[ $ifcfg == *"UUID"* ]] -a  [[ $ifcfg == *"IPADDR"* ]]## if hwaddr or uuid exist ifcfg, replace with eth0 data
+  if [[ $ifcfg == *"UUID"* ]] -o  [[ $ifcfg == *"IPADDR"* ]]## if hwaddr or uuid exist ifcfg, replace with eth0 data
     sed '/HWADDR/d' $ifcfg
     sed '/UUID/d' $ifcfg
     cat "HWADDR=" ip a l | grep IPADDR $ifcfg | egrep -o '(".*?")' | sed 's/\"//g' -B1 | grep ether | awk {'print$2'} >> $ifcfg
