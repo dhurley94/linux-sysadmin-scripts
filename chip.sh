@@ -103,7 +103,7 @@ if [[ !validateIdiocracy -eq 1 ]] -a [[ validateSwap -eq 1 ]]; then
   echo "Please triple check and verify everything is correct.\nThen restart networking on both systems\n."
 	read
   wget post-ipswap.sh
-  sh post-ipswap.shift
+  sh post-ipswap.sh
 else
   echo "We were unable to verify consistency of IP swap."
   echo "Please manually validate and proceed with network restart"
