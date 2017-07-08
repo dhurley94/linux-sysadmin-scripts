@@ -1,5 +1,5 @@
 # cPanel IP swap  
-collection of scripts that can help with migrating to a new cPanel host
+collection of scripts that can help with migrating or managing a new / old cPanel host
 
 ## Working Scripts, and brief Description    
 **ipfixIP.py**, setings all IP addresses to /var/cpanel/mainip, then pareses /etc/userdomains and sets the proper dedicated IP per cPanel   Domain.  
