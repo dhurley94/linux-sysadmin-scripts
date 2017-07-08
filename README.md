@@ -9,7 +9,7 @@ collection of scripts that can help with migrating to a new cPanel host
 **postSwap.sh**, should be ran after completing an IP swap manually or via the script mentioned above.  
 **r1softQuick.py** & shieldplus.sh, these scritpts are currently being combined forautomation purposes  
 **sshkey.py**, generates SSH key on source server and plcaes it on server2 or otherwise.  
-**wp-cronFix.py**, Currently a Word in progress. Will scan entire "updatedb" for version .php and add the wp-cron fix also implementing the cronjob for each user that is considered nedcessary.  
+**wp-cronFix.py**, Currently a Work in progress. Will scan entire "updatedb" for version.php if found rewrite wp-config.php fpr akax.php and also update the cronjob automatically. Consider also implemting automated xmlrpc fix if this page is getting hit by random IPs from Chhina.
 
 # Other Projects?  
 Creating a PCI compliance script to automatically grab todays security "standards" and apply them to each server accordingly. (cPanel Only)  
