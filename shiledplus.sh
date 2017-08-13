@@ -9,16 +9,27 @@ if [[ -e /var/cpanel ]]; then
     sh install.cpanel.sh
 else
     sh install.sh
-done
+fi
 
+rm -fv maldetect-current.tar.gz
 wget http://www.rfxn.com/downloads/maldetect-current.tar.gz
 tar -xvzf maldetect-current.tar.gz
 cd maldet-*
 sh install.sh
 
-PASS = date +%s | sha256sum | base64 | head -c 16;
+PASS=`openssl rand -base64 12`
 
-useradd -p $PASS singlehop
-usermod -G wheel singlehop
-echo "Sudoer: singlehop\nPass:\n"
-echo $PASS
+useradd singlehop
+echo singlehop:$PASS | chpasswd
+usermod -aG wheel singlehop
+
+echo ""
+echo "CSF & Maldet installed, but not configured."
+echo ""
+echo "New Sudo user added"
+echo "Please save in Manage notes and provide to client."
+echo ""
+echo "singlehop / $PASS"
+echo ""
+
+cd ~
