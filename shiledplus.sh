@@ -20,5 +20,5 @@ PASS = date +%s | sha256sum | base64 | head -c 16;
 
 useradd -p $PASS singlehop
 usermod -G wheel singlehop
-echo "singlehop"
+echo "Sudoer: singlehop\nPass:\n"
 echo $PASS
