@@ -20,6 +20,8 @@ tar -xvzf maldetect-current.tar.gz
 cd maldetect-*
 sh install.sh
 
+sed -i '/Port/c\Port=2222' /etc/ssh/sshd_config
+
 PASS=`openssl rand -base64 12`
 
 useradd singlehop
@@ -30,7 +32,8 @@ echo ""
 echo "CSF & Maldet installed, but not configured."
 echo ""
 echo "New Sudo user added"
-echo "Please save in Manage notes and provide to client."
+echo "Please update SSH port in Manage to 2222."
+echo "Update Manage notes and client with sudoer."
 echo ""
 echo "singlehop / $PASS"
 echo ""
