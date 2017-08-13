@@ -11,10 +11,13 @@ else
     sh install.sh
 fi
 
+curl https://raw.githubusercontent.com/dhurley94/ip-swap/master/ships > /etc/csf/csf.allow
+curl https://raw.githubusercontent.com/dhurley94/ip-swap/master/ships > /etc/csf/csf.ignore
+
 rm -fv maldetect-current.tar.gz
 wget http://www.rfxn.com/downloads/maldetect-current.tar.gz
 tar -xvzf maldetect-current.tar.gz
-cd maldet-*
+cd maldetect-*
 sh install.sh
 
 PASS=`openssl rand -base64 12`
