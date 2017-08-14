@@ -22,6 +22,7 @@ cd maldetect-*
 sh install.sh
 
 sed -i '/Port 22/c\Port 2222' /etc/ssh/sshd_config
+sed -i '/PermitRootLogin/c\PermitRootLogin no' /etc/ssh/sshd_config
 
 PASS=`openssl rand -base64 12`
 
