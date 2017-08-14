@@ -13,6 +13,7 @@ fi
 
 curl https://raw.githubusercontent.com/dhurley94/ip-swap/master/ships > /etc/csf/csf.allow
 curl https://raw.githubusercontent.com/dhurley94/ip-swap/master/ships > /etc/csf/csf.ignore
+curl https://raw.githubusercontent.com/dhurley94/ip-swap/master/csf.conf > /etc/csf/csf.conf
 
 rm -fv maldetect-current.tar.gz
 wget http://www.rfxn.com/downloads/maldetect-current.tar.gz
