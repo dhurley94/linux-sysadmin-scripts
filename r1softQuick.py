@@ -11,7 +11,7 @@ def shieldplus():
 	
 def install(key):
     install = "yum -y install serverbackup-enterprise-agent"
-    addkey="serverbackup-setup --get-key=http://%s"  % (key)
+    addkey="serverbackup-setup --get-key=https://%s"  % (key)
     getmod="serverbackup-setup --get-module"
     cdprestart="service cdp-agent restart"
     subprocess.call(install, shell=True)
